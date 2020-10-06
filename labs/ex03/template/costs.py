@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Function used to compute the loss."""
 
+import numpy as np
+
 def compute_loss_MSE(y, tx, w):
     N=tx.shape[0]
     err=y-tx@w
