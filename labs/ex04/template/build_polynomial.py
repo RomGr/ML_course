@@ -6,10 +6,8 @@ import numpy as np
 
 def build_poly(x, degree):
     """polynomial basis functions for input data x, for j=0 up to j=degree."""
-    # ***************************************************
-    # INSERT YOUR CODE HERE
-    # polynomial basis function: TODO
-    # this function should return the matrix formed
-    # by applying the polynomial basis to the input data
-    # ***************************************************
-    raise NotImplementedError
+    phi = np.zeros((len(x),degree+1))
+    for ind, x_ in enumerate(x):
+        for j in np.arange(degree+1):
+            phi[ind,j]=pow(x_,j)
+    return phi
