@@ -2,7 +2,7 @@
 
 import numpy as np
 
-#---------------------- Least square GD functions ------------------------
+#------------------least_square_GD functions------------------
 
 def calculate_mse(e):
     """Calculate mse for vector e."""
@@ -39,7 +39,7 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma):
 
     return w, loss
 
-#---------------------- Least Squares SGD functions --------------------------
+#---------------------Least_Squares_SGD functions------------------
 
 def compute_stoch_gradient(y, tx, w):
     """Compute a stochastic gradient for batch data."""
@@ -85,7 +85,7 @@ def least_squares_SGD(y, tx, initial_w, batch_size, max_iters, gamma):
 
     return w, loss
 
-#---------------------------- Least Squares functions ------------------------------
+#----------------------------Least_Squares functions-----------------------
 
 
 
@@ -97,15 +97,18 @@ def least_squares(y, tx):
     loss = compute_loss(y,tx,w)
     return w,loss
 
-# --------------------------- Ridge regression -------------------------------------
+# -------------------------Ridge_Regression-------------------------------------
 
 def ridge_regression(y, tx, lambda_):
+
     """implement ridge regression."""
-    lambda_=lambda_*(2*len(tx))
-    w=np.dot(np.linalg.inv(np.dot(tx.T,tx)+lambda_*np.identity(tx.shape[1])),np.dot(tx.T,y))
-    err=tx@w-y
-    mse=1/(2*len(tx))*np.sum(np.square(err))
-    return w, mse
+    aI = lambda_ * np.identity(tx.shape[1])
+    a = tx.T.dot(tx) + aI
+    b = tx.T.dot(y)
+    w = np.linalg.solve(a, b)
+    loss = compute_loss(y,tx,w)
+
+    return w, loss
 
 # -------------------------- Logistic regression -----------------------------------
 
@@ -182,14 +185,16 @@ def learning_by_penalized_gradient(y, tx, w, gamma, lambda_):
     return loss, w
 
 
-def logistic_regression_penalized_gradient_descent(y, tx, w, lambda_, max_iter, gamma, batch_size=0):
+##look if we keep the print
+def logistic_regression_penalized_gradient_descent(y, tx, w, lambda_, max_iter, gamma, batch_size):
     threshold = 1e-8
     losses = []
-    if batch_size != 0:
-        batch=batch_iter(y,tx,batch_size)
-        data=next(batch)
-        y=data[0]
-        tx=data[1]
+    batch_size=100
+
+    batch=batch_iter(y,tx,batch_size)
+    data=next(batch)
+    y=data[0]
+    tx=data[1]
 
     # start the logistic regression
     for iter in range(max_iter):
@@ -204,7 +209,5 @@ def logistic_regression_penalized_gradient_descent(y, tx, w, lambda_, max_iter, 
         losses.append(loss)
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
             break
-            
-    l=calculate_loss(y, tx, w)
     # visualization
-    return w, l
+    return w, loss

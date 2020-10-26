@@ -182,14 +182,16 @@ def learning_by_penalized_gradient(y, tx, w, gamma, lambda_):
     return loss, w
 
 
-def logistic_regression_penalized_gradient_descent(y, tx, w, lambda_, max_iter, gamma, batch_size=0):
+##look if we keep the print
+def logistic_regression_penalized_gradient_descent(y, tx, w, lambda_, max_iter, gamma, batch_size):
     threshold = 1e-8
     losses = []
-    if batch_size != 0:
-        batch=batch_iter(y,tx,batch_size)
-        data=next(batch)
-        y=data[0]
-        tx=data[1]
+    batch_size=100
+
+    batch=batch_iter(y,tx,batch_size)
+    data=next(batch)
+    y=data[0]
+    tx=data[1]
 
     # start the logistic regression
     for iter in range(max_iter):
@@ -204,7 +206,5 @@ def logistic_regression_penalized_gradient_descent(y, tx, w, lambda_, max_iter, 
         losses.append(loss)
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
             break
-            
-    l=calculate_loss(y, tx, w)
     # visualization
-    return w, l
+    return w, loss
